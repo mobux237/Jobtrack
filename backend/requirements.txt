@@ -8,3 +8,4 @@ aiosqlite
 python-multipart
 pdfplumber
 python-docx
+openai
