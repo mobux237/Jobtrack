@@ -7,16 +7,16 @@ function CV() {
     nom: '',
     email: '',
     telephone: '',
-    adresse: 'Élancourt, Île-de-France',
+    adresse: 'Elancourt, Ile-de-France',
     poste: '',
     entreprise: '',
     secteur: 'Ressources Humaines',
     formation: 'Master Gestion des Ressources Humaines',
-    etablissement: 'UVSQ – Université de Versailles Saint-Quentin-en-Yvelines',
+    etablissement: 'UVSQ - Universite de Versailles Saint-Quentin-en-Yvelines',
     annee_diplome: '2026',
-    formation_precedente: 'Licence 3 Administration Économique et Sociale',
+    formation_precedente: 'Licence 3 Administration Economique et Sociale',
     experiences: '',
-    langues: 'Français (natif), Anglais (intermédiaire)',
+    langues: 'Francais (natif), Anglais (intermediaire)',
     description_offre: ''
   });
 
@@ -24,13 +24,13 @@ function CV() {
   const [competences, setCompetences] = useState([]);
   const [loading, setLoading] = useState(false);
   const [copie, setCopie] = useState(false);
-  const [onglet, setOnglet] = useState('infos'); // 'infos' | 'offre'
+  const [onglet, setOnglet] = useState('infos');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post(`${process.env.REACT_APP_API_URL}/cv/generer", form);
+      const res = await axios.post("http://localhost:8000/cv/generer", form);
       setCv(res.data.cv);
       setCompetences(res.data.competences_detectees || []);
     } catch (err) {
@@ -48,44 +48,36 @@ function CV() {
 
   const inputClass = "w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400";
 
+  const btnOnglet = (nom) => {
+    if (onglet === nom) {
+      return "flex-1 py-2 rounded-md text-sm font-medium transition bg-white text-indigo-700 shadow";
+    }
+    return "flex-1 py-2 rounded-md text-sm font-medium transition text-gray-500 hover:text-gray-700";
+  };
+
   return (
     <div>
-      <h2 className="text-3xl font-bold text-gray-800 mb-2">Générateur de CV</h2>
-      <p className="text-gray-500 mb-6">Crée un CV adapté à l'offre d'emploi en quelques secondes</p>
+      <h2 className="text-3xl font-bold text-gray-800 mb-2">Generateur de CV</h2>
+      <p className="text-gray-500 mb-6">Cree un CV adapte a l offre d emploi en quelques secondes</p>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
-        {/* Formulaire avec onglets */}
         <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow p-6 flex flex-col gap-4">
 
-          {/* Onglets */}
           <div className="flex gap-2 bg-gray-100 p-1 rounded-lg">
-            <button type="button"
-              onClick={() => setOnglet('infos')}
-              className={`flex-1 py-2 rounded-md text-sm font-medium transition ${
-                onglet === 'infos'
-                  ? 'bg-white text-indigo-700 shadow'
-                  : 'text-gray-500 hover:text-gray-700'
-              }`}>
-              👤 Mes informations
+            <button type="button" onClick={() => setOnglet('infos')} className={btnOnglet('infos')}>
+              Mes informations
             </button>
-            <button type="button"
-              onClick={() => setOnglet('offre')}
-              className={`flex-1 py-2 rounded-md text-sm font-medium transition ${
-                onglet === 'offre'
-                  ? 'bg-white text-indigo-700 shadow'
-                  : 'text-gray-500 hover:text-gray-700'
-              }`}>
-              📋 Offre d'emploi
+            <button type="button" onClick={() => setOnglet('offre')} className={btnOnglet('offre')}>
+              Offre d emploi
             </button>
           </div>
 
-          {/* Onglet Infos */}
           {onglet === 'infos' && (
             <div className="flex flex-col gap-3">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">Prénom</label>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">Prenom</label>
                   <input required value={form.prenom}
                     onChange={e => setForm({...form, prenom: e.target.value})}
                     className={inputClass} />
@@ -107,7 +99,7 @@ function CV() {
                     className={inputClass} />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">Téléphone</label>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">Telephone</label>
                   <input required value={form.telephone}
                     onChange={e => setForm({...form, telephone: e.target.value})}
                     placeholder="06 XX XX XX XX"
@@ -116,15 +108,15 @@ function CV() {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Poste visé</label>
-                <input required placeholder="Ex: Chargé(e) RH Alternance" value={form.poste}
+                <label className="block text-xs font-medium text-gray-600 mb-1">Poste vise</label>
+                <input required placeholder="Ex: Charge(e) RH Alternance" value={form.poste}
                   onChange={e => setForm({...form, poste: e.target.value})}
                   className={inputClass} />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Entreprise ciblée</label>
-                <input required placeholder="Ex: Société Générale" value={form.entreprise}
+                <label className="block text-xs font-medium text-gray-600 mb-1">Entreprise ciblee</label>
+                <input required placeholder="Ex: Societe Generale" value={form.entreprise}
                   onChange={e => setForm({...form, entreprise: e.target.value})}
                   className={inputClass} />
               </div>
@@ -142,7 +134,7 @@ function CV() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">Année diplôme</label>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">Annee diplome</label>
                   <input value={form.annee_diplome}
                     onChange={e => setForm({...form, annee_diplome: e.target.value})}
                     className={inputClass} />
@@ -151,15 +143,15 @@ function CV() {
 
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">
-                  Expériences professionnelles
-                  <span className="text-gray-400 font-normal ml-1">(optionnel — généré automatiquement si vide)</span>
+                  Experiences professionnelles
+                  <span className="text-gray-400 font-normal ml-1">(optionnel)</span>
                 </label>
                 <textarea
-                  placeholder={"Ex:\n• Alternance RH – Société Générale (2024)\n  - Suivi des recrutements\n  - Gestion administrative des contrats"}
+                  placeholder="Ex: Alternance RH - Societe Generale (2024)"
                   value={form.experiences}
                   onChange={e => setForm({...form, experiences: e.target.value})}
                   rows={4}
-                  className={`${inputClass} resize-none`}
+                  className={inputClass + " resize-none"}
                 />
               </div>
 
@@ -172,56 +164,50 @@ function CV() {
             </div>
           )}
 
-          {/* Onglet Offre */}
           {onglet === 'offre' && (
             <div className="flex flex-col gap-3">
               <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-3 text-sm text-indigo-700">
-                💡 <strong>Astuce :</strong> Plus l'offre est détaillée, plus le CV sera personnalisé.
-                Colle le texte complet de l'offre (missions, compétences, profil recherché).
+                Astuce : Plus l offre est detaillee, plus le CV sera personnalise.
               </div>
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">
-                  📋 Description complète de l'offre d'emploi
+                  Description complete de l offre
                 </label>
                 <textarea
-                  placeholder={"Copiez-collez ici l'offre d'emploi complète...\n\nExemple :\nMissions :\n- Participer au recrutement et à l'onboarding\n- Gérer les dossiers du personnel\n- Contribuer au reporting RH\n\nProfil :\n- Étudiant(e) en Master RH\n- Maîtrise d'Excel et SIRH\n- Connaissance du droit du travail"}
+                  placeholder="Copiez-collez ici l offre d emploi complete..."
                   value={form.description_offre}
                   onChange={e => setForm({...form, description_offre: e.target.value})}
                   rows={12}
-                  className={`${inputClass} resize-none bg-white border-2 border-indigo-200`}
+                  className={inputClass + " resize-none bg-white border-2 border-indigo-200"}
                 />
               </div>
-              <p className="text-xs text-gray-400">
-                Les compétences mentionnées dans l'offre seront automatiquement mises en avant dans ton CV ✨
-              </p>
             </div>
           )}
 
           <button type="submit" disabled={loading}
             className="bg-indigo-600 text-white rounded-lg px-6 py-3 hover:bg-indigo-700 transition font-semibold disabled:opacity-50 mt-2">
-            {loading ? "Génération en cours..." : "✨ Générer mon CV adapté"}
+            {loading ? "Generation en cours..." : "Generer mon CV adapte"}
           </button>
         </form>
 
-        {/* Résultat */}
         <div className="bg-white rounded-xl shadow p-6 flex flex-col">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="text-xl font-semibold">Ton CV personnalisé</h3>
+            <h3 className="text-xl font-semibold">Ton CV personnalise</h3>
             {cv && (
               <button onClick={handleCopier}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
-                  copie ? 'bg-green-100 text-green-700' : 'bg-indigo-100 text-indigo-700 hover:bg-indigo-200'
-                }`}>
-                {copie ? '✅ Copié !' : '📋 Copier'}
+                className={copie
+                  ? "px-4 py-2 rounded-lg text-sm font-medium bg-green-100 text-green-700"
+                  : "px-4 py-2 rounded-lg text-sm font-medium bg-indigo-100 text-indigo-700 hover:bg-indigo-200"
+                }>
+                {copie ? 'Copie !' : 'Copier'}
               </button>
             )}
           </div>
 
-          {/* Compétences détectées */}
           {competences.length > 0 && (
             <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
               <p className="text-xs font-semibold text-green-700 mb-2">
-                ✅ {competences.length} compétence(s) adaptée(s) à l'offre :
+                {competences.length} competence(s) adaptee(s) a l offre :
               </p>
               <div className="flex flex-wrap gap-2">
                 {competences.map((c, i) => (
@@ -243,8 +229,8 @@ function CV() {
             <div className="flex-1 min-h-96 flex items-center justify-center text-gray-400 border-2 border-dashed rounded-lg">
               <div className="text-center">
                 <p className="text-4xl mb-3">📄</p>
-                <p className="font-medium">Ton CV adapté apparaîtra ici</p>
-                <p className="text-sm mt-1">Remplis tes infos + colle l'offre pour un CV sur-mesure</p>
+                <p className="font-medium">Ton CV adapte apparaitra ici</p>
+                <p className="text-sm mt-1">Remplis tes infos et colle l offre</p>
               </div>
             </div>
           )}
