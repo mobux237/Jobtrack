@@ -17,12 +17,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(offres.routes)
-app.include_router(candidatures.routes)
-app.include_router(lettres.routes)
-app.include_router(cv.routes)
-app.include_router(cv_ats_routes)
-app.include_router(lettres_ats_routes)
+app.include_routes(offres.routes)
+app.include_routes(candidatures.routes)
+app.include_routes(lettres.routes)
+app.include_routes(cv.routes)
+app.include_routes(cv_ats_routes)
+app.include_routes(lettres_ats_routes)
 
 @app.get("/")
 def read_root():
