@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes import offres, candidatures, lettres, cv
+from routers.cv_ats import router as cv_ats_router
+app.include_router(cv_ats_router)
 
 app = FastAPI(title="JobTrack API", version="1.0.0")
 
