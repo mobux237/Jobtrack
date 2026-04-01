@@ -65,8 +65,8 @@ function Dashboard() {
   const fetchStats = async () => {
     try {
       const [resStats, resTaux] = await Promise.all([
-        axios.get("http://localhost:8000/candidatures/stats"),
-        axios.get("http://localhost:8000/candidatures/taux-reponse")
+        axios.get("https://jobtrack-256h.onrender.com/candidatures/stats"),
+        axios.get("https://jobtrack-256h.onrender.com/candidatures/taux-reponse")
       ]);
       setStats(resStats.data);
       setTaux(resTaux.data);

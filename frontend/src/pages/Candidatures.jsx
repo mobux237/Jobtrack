@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const API = "http://localhost:8000/candidatures";
+const API = "https://jobtrack-256h.onrender.com/candidatures";
 
 const statutColor = (statut) => {
   const colors = {

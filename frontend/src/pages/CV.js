@@ -30,7 +30,7 @@ function CV() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:8000/cv/generer", form);
+      const res = await axios.post("https://jobtrack-256h.onrender.com/cv/generer", form);
       setCv(res.data.cv);
       setCompetences(res.data.competences_detectees || []);
     } catch (err) {

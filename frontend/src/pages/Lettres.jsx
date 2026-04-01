@@ -21,7 +21,7 @@ function Lettres() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:8000/lettres/generer", form);
+      const res = await axios.post("https://jobtrack-256h.onrender.com/lettres/generer", form);
       setLettre(res.data.lettre);
       setTags({
         competences: res.data.competences_detectees || [],
