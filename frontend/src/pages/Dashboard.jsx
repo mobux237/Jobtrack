@@ -1,58 +1,103 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
+const glass = {
+  background: 'rgba(255,255,255,0.07)',
+  backdropFilter: 'blur(16px)',
+  WebkitBackdropFilter: 'blur(16px)',
+  border: '1px solid rgba(255,255,255,0.15)',
+  borderRadius: '1.25rem',
+  padding: '1.5rem',
+  boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+  color: '#f1f5f9',
+};
+
+const accentColors = {
+  blue:   { glow: 'rgba(56,189,248,0.25)',  bar: 'linear-gradient(90deg,#38bdf8,#818cf8)' },
+  green:  { glow: 'rgba(52,211,153,0.25)',  bar: 'linear-gradient(90deg,#34d399,#38bdf8)' },
+  yellow: { glow: 'rgba(251,191,36,0.25)',  bar: 'linear-gradient(90deg,#fbbf24,#f97316)' },
+  purple: { glow: 'rgba(167,139,250,0.25)', bar: 'linear-gradient(90deg,#a78bfa,#818cf8)' },
+};
+
 function StatCard({ titre, valeur, soustitre, couleur, icone, extra }) {
+  const accent = accentColors[couleur] || accentColors.blue;
+
   return (
-    <div className={`bg-white rounded-xl shadow p-6 border-l-4 ${couleur}`}>
-      <div className="flex justify-between items-start">
-        <div>
-          <p className="text-sm text-gray-500 font-medium">{titre}</p>
-          <p className="text-3xl font-bold text-gray-800 mt-1">{valeur}</p>
-          {soustitre && <p className="text-xs text-gray-400 mt-1">{soustitre}</p>}
+    <div
+      style={{
+        ...glass,
+        boxShadow: `0 8px 32px rgba(0,0,0,0.4), 0 0 30px ${accent.glow}`,
+        transition: 'transform 200ms ease, box-shadow 200ms ease',
+      }}
+      onMouseEnter={(e) => (e.currentTarget.style.transform = 'translateY(-4px)')}
+      onMouseLeave={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
+    >
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <div style={{ flex: 1 }}>
+          <p style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.5rem' }}>
+            {titre}
+          </p>
+          <p
+            style={{
+              fontSize: '2.5rem',
+              fontWeight: 700,
+              lineHeight: 1,
+              background: 'linear-gradient(135deg,#fff,#a78bfa)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+            }}
+          >
+            {valeur}
+          </p>
+          {soustitre && <p style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.4rem' }}>{soustitre}</p>}
           {extra}
         </div>
-        <span className="text-3xl">{icone}</span>
+        <span style={{ fontSize: '2rem', opacity: 0.85 }}>{icone}</span>
       </div>
     </div>
   );
 }
 
 function TauxReponseCard({ taux, avec_reponse, sans_reponse, total }) {
-  const couleur =
-    taux >= 50 ? 'text-green-600' :
-    taux >= 25 ? 'text-yellow-500' :
-    'text-red-500';
-
-  const bgBarre =
-    taux >= 50 ? 'bg-green-500' :
-    taux >= 25 ? 'bg-yellow-400' :
-    'bg-red-400';
+  const couleur = taux >= 50 ? '#34d399' : taux >= 25 ? '#fbbf24' : '#f87171';
+  const barColor =
+    taux >= 50
+      ? 'linear-gradient(90deg,#34d399,#38bdf8)'
+      : taux >= 25
+      ? 'linear-gradient(90deg,#fbbf24,#f97316)'
+      : 'linear-gradient(90deg,#f87171,#f43f5e)';
 
   return (
-    <div className="bg-white rounded-xl shadow p-6 border-l-4 border-indigo-500">
-      <div className="flex justify-between items-start mb-3">
+    <div style={{ ...glass, boxShadow: '0 8px 32px rgba(0,0,0,0.4), 0 0 30px rgba(129,140,248,0.2)' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
         <div>
-          <p className="text-sm text-gray-500 font-medium">Taux de réponse</p>
-          <p className={`text-3xl font-bold mt-1 ${couleur}`}>{taux}%</p>
-          <p className="text-xs text-gray-400 mt-1">
+          <p style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.5rem' }}>
+            Taux de réponse
+          </p>
+          <p style={{ fontSize: '2.5rem', fontWeight: 700, color: couleur, lineHeight: 1 }}>{taux}%</p>
+          <p style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.4rem' }}>
             {avec_reponse} réponse{avec_reponse > 1 ? 's' : ''} sur {total} candidature{total > 1 ? 's' : ''}
           </p>
         </div>
-        <span className="text-3xl">📬</span>
+        <span style={{ fontSize: '2rem' }}>📬</span>
       </div>
 
-      {/* Barre de progression */}
-      <div className="w-full bg-gray-100 rounded-full h-3 mt-2">
+      <div style={{ background: 'rgba(255,255,255,0.08)', borderRadius: '9999px', height: '8px', overflow: 'hidden' }}>
         <div
-          className={`${bgBarre} h-3 rounded-full transition-all duration-700`}
-          style={{ width: `${taux}%` }}
+          style={{
+            background: barColor,
+            height: '100%',
+            width: `${taux}%`,
+            borderRadius: '9999px',
+            transition: 'width 700ms ease',
+          }}
         />
       </div>
 
-      {/* Détail */}
-      <div className="flex justify-between mt-3 text-xs text-gray-500">
-        <span>✅ Avec réponse : <strong>{avec_reponse}</strong></span>
-        <span>⏳ Sans réponse : <strong>{sans_reponse}</strong></span>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.75rem', fontSize: '0.78rem', color: '#64748b' }}>
+        <span>✅ Avec réponse : <strong style={{ color: '#34d399' }}>{avec_reponse}</strong></span>
+        <span>⏳ Sans réponse : <strong style={{ color: '#94a3b8' }}>{sans_reponse}</strong></span>
       </div>
     </div>
   );
@@ -65,8 +110,8 @@ function Dashboard() {
   const fetchStats = async () => {
     try {
       const [resStats, resTaux] = await Promise.all([
-        axios.get("https://jobtrack-256h.onrender.com/candidatures/stats"),
-        axios.get("https://jobtrack-256h.onrender.com/candidatures/taux-reponse")
+        axios.get('https://jobtrack-256h.onrender.com/candidatures/stats'),
+        axios.get('https://jobtrack-256h.onrender.com/candidatures/taux-reponse'),
       ]);
       setStats(resStats.data);
       setTaux(resTaux.data);
@@ -77,53 +122,72 @@ function Dashboard() {
 
   useEffect(() => {
     fetchStats();
-    // Mise à jour automatique toutes les 10 secondes
     const interval = setInterval(fetchStats, 10000);
     return () => clearInterval(interval);
   }, []);
 
   if (!stats || !taux) {
-  return (
-    <div className="flex items-center justify-center h-64 text-gray-400 flex-col gap-3">
-      <p className="text-4xl">⚠️</p>
-      <p>Impossible de charger les données</p>
-      <p className="text-sm">Vérifie que le serveur backend est bien lancé</p>
-    </div>
-  );
-}
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '16rem', flexDirection: 'column', gap: '1rem', color: '#64748b' }}>
+        <p style={{ fontSize: '2.5rem' }}>⚠️</p>
+        <p style={{ fontWeight: 500 }}>Impossible de charger les données</p>
+        <p style={{ fontSize: '0.8rem' }}>Vérifie que le serveur backend est bien lancé</p>
+      </div>
+    );
+  }
 
   const statuts = [
-    { label: 'En attente', key: 'En attente', color: 'bg-gray-200 text-gray-700' },
-    { label: 'Relance', key: 'Relance', color: 'bg-yellow-100 text-yellow-700' },
-    { label: 'Entretien', key: 'Entretien', color: 'bg-blue-100 text-blue-700' },
-    { label: 'Refus', key: 'Refus', color: 'bg-red-100 text-red-700' },
+    { label: 'En attente', key: 'En attente', color: '#94a3b8', bar: 'linear-gradient(90deg,#94a3b8,#64748b)' },
+    { label: 'Relancé', key: 'Relance', color: '#fbbf24', bar: 'linear-gradient(90deg,#fbbf24,#f97316)' },
+    { label: 'Entretien', key: 'Entretien', color: '#38bdf8', bar: 'linear-gradient(90deg,#38bdf8,#818cf8)' },
+    { label: 'Refus', key: 'Refus', color: '#f87171', bar: 'linear-gradient(90deg,#f87171,#f43f5e)' },
   ];
 
   return (
-    <div>
-      <h2 className="text-3xl font-bold text-gray-800 mb-2">Tableau de bord</h2>
-      <p className="text-gray-500 mb-8">Suivi en temps réel de tes candidatures</p>
+    <div style={{ padding: '2rem 1.5rem', maxWidth: '1200px', margin: '0 auto' }}>
+      <div style={{ marginBottom: '2rem' }}>
+        <h1
+          style={{
+            fontFamily: "'Syne',sans-serif",
+            fontSize: 'clamp(1.5rem,3vw,2.25rem)',
+            fontWeight: 700,
+            background: 'linear-gradient(135deg,#fff,#a78bfa)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+            marginBottom: '0.4rem',
+          }}
+        >
+          Tableau de bord
+        </h1>
+        <p style={{ color: '#64748b', fontSize: '0.9rem' }}>Suivi en temps réel de tes candidatures</p>
+      </div>
 
-      {/* Grille de stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
-        <StatCard
-          titre="Total candidatures"
-          valeur={stats.total}
-          soustitre="depuis le début"
-          couleur="border-blue-500"
-          icone="📁"
-        />
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill,minmax(min(220px,100%),1fr))',
+          gap: '1.25rem',
+          marginBottom: '1.5rem',
+        }}
+      >
+        <StatCard titre="Total candidatures" valeur={stats.total} soustitre="depuis le début" couleur="blue" icone="📁" />
         <StatCard
           titre="Entretiens obtenus"
           valeur={stats.par_statut?.['Entretien'] || 0}
           soustitre="objectif : 5 entretiens"
-          couleur="border-green-500"
+          couleur="green"
           icone="🎯"
           extra={
-            <div className="w-full bg-gray-100 rounded-full h-2 mt-2">
+            <div style={{ background: 'rgba(255,255,255,0.08)', borderRadius: '9999px', height: '6px', marginTop: '0.6rem', overflow: 'hidden' }}>
               <div
-                className="bg-green-400 h-2 rounded-full transition-all duration-700"
-                style={{ width: `${Math.min(((stats.par_statut?.['Entretien'] || 0) / 5) * 100, 100)}%` }}
+                style={{
+                  background: 'linear-gradient(90deg,#34d399,#38bdf8)',
+                  height: '100%',
+                  width: `${Math.min(((stats.par_statut?.['Entretien'] || 0) / 5) * 100, 100)}%`,
+                  borderRadius: '9999px',
+                  transition: 'width 700ms ease',
+                }}
               />
             </div>
           }
@@ -132,20 +196,13 @@ function Dashboard() {
           titre="En attente de réponse"
           valeur={stats.par_statut?.['En attente'] || 0}
           soustitre="candidatures envoyées"
-          couleur="border-yellow-400"
+          couleur="yellow"
           icone="⏳"
         />
-        <StatCard
-          titre="Cette semaine"
-          valeur={stats.cette_semaine || 0}
-          soustitre="nouvelles candidatures"
-          couleur="border-purple-500"
-          icone="📅"
-        />
+        <StatCard titre="Cette semaine" valeur={stats.cette_semaine || 0} soustitre="nouvelles candidatures" couleur="purple" icone="📅" />
       </div>
 
-      {/* Taux de réponse — pleine largeur */}
-      <div className="mb-8">
+      <div style={{ marginBottom: '1.5rem' }}>
         <TauxReponseCard
           taux={taux.taux}
           avec_reponse={taux.avec_reponse}
@@ -154,23 +211,46 @@ function Dashboard() {
         />
       </div>
 
-      {/* Répartition par statut */}
-      <div className="bg-white rounded-xl shadow p-6">
-        <h3 className="text-lg font-semibold text-gray-700 mb-4">Répartition par statut</h3>
-        <div className="flex flex-col gap-3">
-          {statuts.map(s => {
+      <div style={glass}>
+        <h2 style={{ fontWeight: 600, marginBottom: '1.25rem', textTransform: 'uppercase', letterSpacing: '0.05em', fontSize: '0.8rem', color: '#94a3b8' }}>
+          Répartition par statut
+        </h2>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          {statuts.map((s) => {
             const count = stats.par_statut?.[s.key] || 0;
             const pct = stats.total > 0 ? Math.round((count / stats.total) * 100) : 0;
+
             return (
               <div key={s.key}>
-                <div className="flex justify-between text-sm mb-1">
-                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${s.color}`}>{s.label}</span>
-                  <span className="text-gray-500">{count} ({pct}%)</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
+                  <span
+                    style={{
+                      fontSize: '0.78rem',
+                      fontWeight: 600,
+                      color: s.color,
+                      background: `${s.color}18`,
+                      border: `1px solid ${s.color}40`,
+                      padding: '0.15rem 0.6rem',
+                      borderRadius: '9999px',
+                    }}
+                  >
+                    {s.label}
+                  </span>
+                  <span style={{ fontSize: '0.8rem', color: '#64748b' }}>
+                    {count} <span style={{ color: '#475569' }}>({pct}%)</span>
+                  </span>
                 </div>
-                <div className="w-full bg-gray-100 rounded-full h-2">
+
+                <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: '9999px', height: '6px', overflow: 'hidden' }}>
                   <div
-                    className="bg-blue-400 h-2 rounded-full transition-all duration-700"
-                    style={{ width: `${pct}%` }}
+                    style={{
+                      background: s.bar,
+                      height: '100%',
+                      width: `${pct}%`,
+                      borderRadius: '9999px',
+                      transition: 'width 700ms ease',
+                    }}
                   />
                 </div>
               </div>
