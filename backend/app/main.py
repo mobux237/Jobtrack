@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes import offres, candidatures, lettres, cv
-from app.routes.cv_ats import routes as cv_ats_router
-from app.routes.lettres_ats import routes as lettres_ats_router
+from app.routes.cv_ats import router as cv_ats_router
+from app.routes.lettres_ats import router as lettres_ats_router
 
 app = FastAPI(title="JobTrack API", version="1.0.0")
 
@@ -17,12 +17,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_routes(offres.routes)
-app.include_routes(candidatures.routes)
-app.include_routes(lettres.routes)
-app.include_routes(cv.routes)
-app.include_routes(cv_ats_routes)
-app.include_routes(lettres_ats_routes)
+app.include_router(offres.router)
+app.include_router(candidatures.router)
+app.include_router(lettres.router)
+app.include_router(cv.router)
+app.include_router(cv_ats_router)
+app.include_router(lettres_ats_router)
 
 @app.get("/")
 def read_root():
